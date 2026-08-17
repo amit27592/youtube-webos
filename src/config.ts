@@ -280,6 +280,16 @@ const configOptions = {
     default: false,
     desc: 'Remove end screens from video'
   },
+  /**
+   * Off means the startup prompt is suppressed. Independent of
+   * `autoAccountSelect`, which answers the account selector once it appears —
+   * see `src/whos-watching.ts`.
+   */
+  enableWhosWatching: {
+    type: 'boolean',
+    default: true,
+    desc: 'Show the "Who\'s watching?" screen'
+  },
   autoAccountSelect: {
     type: 'boolean',
     default: false,

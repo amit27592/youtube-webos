@@ -159,7 +159,10 @@ export const settingsTree: SettingsGroup = {
       kind: 'group',
       title: 'webOS',
       icon: 'TV',
-      children: [option('autoAccountSelect', { icon: 'ACCOUNT_CIRCLE' })]
+      children: [
+        option('autoAccountSelect', { icon: 'ACCOUNT_CIRCLE' }),
+        option('enableWhosWatching', { icon: 'ACCOUNT_CIRCLE' })
+      ]
     }
   ]
 };
