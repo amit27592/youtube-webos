@@ -161,7 +161,9 @@ export const settingsTree: SettingsGroup = {
           icon: 'VISIBILITY_OFF'
         }),
         option('hideWatchedVideosThreshold', { icon: 'VISIBILITY_OFF' }),
-        option('hideWatchedVideosPages', { icon: 'VISIBILITY_OFF' })
+        option('hideWatchedVideosPages', { icon: 'VISIBILITY_OFF' }),
+        option('disabledSidebarContents', { icon: 'MENU' }),
+        option('disableChannelsOnSidebar', { icon: 'MENU' })
       ]
     },
     {

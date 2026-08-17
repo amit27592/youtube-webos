@@ -31,6 +31,7 @@ import './clock';
 import './theme';
 import './screen-dim';
 import './hide-watched';
+import './sidebar';
 import './video-quality';
 import './video-codec';
 import './dearrow';

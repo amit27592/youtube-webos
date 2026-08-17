@@ -220,6 +220,35 @@ const configOptions = {
     ],
     desc: 'Pages to hide watched videos on'
   },
+  /**
+   * Matched by `iconType`: labels are localised, icons aren't. See
+   * `src/sidebar.ts`.
+   */
+  disabledSidebarContents: {
+    type: 'multi',
+    default: [],
+    values: [
+      { value: 'SEARCH', label: 'Search' },
+      { value: 'WHAT_TO_WATCH', label: 'Home' },
+      { value: 'YOUTUBE_SHORTS_FILL_24', label: 'Shorts' },
+      { value: 'SUBSCRIPTIONS', label: 'Subscriptions' },
+      { value: 'TAB_LIBRARY', label: 'Library' },
+      { value: 'TROPHY', label: 'Sports' },
+      { value: 'NEWS', label: 'News' },
+      { value: 'YOUTUBE_MUSIC', label: 'Music' },
+      { value: 'BROADCAST', label: 'Podcasts' },
+      { value: 'CLAPPERBOARD', label: 'Movies & TV' },
+      { value: 'LIVE', label: 'Live' },
+      { value: 'GAMING', label: 'Gaming' },
+      { value: 'TAB_MORE', label: 'More' }
+    ],
+    desc: 'Sidebar entries to hide'
+  },
+  disableChannelsOnSidebar: {
+    type: 'boolean',
+    default: false,
+    desc: 'Hide subscribed channels from the sidebar'
+  },
   hideLogo: {
     type: 'boolean',
     default: false,
