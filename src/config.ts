@@ -147,10 +147,34 @@ const configOptions = {
     default: false,
     desc: 'Display time in UI'
   },
-  forceHighResVideo: {
-    type: 'boolean',
-    default: false,
-    desc: 'Force max resolution video playback'
+  preferredVideoQuality: {
+    type: 'enum',
+    default: 'auto',
+    values: [
+      { value: 'auto', label: 'Auto' },
+      { value: '2160p', label: '2160p (4K)' },
+      { value: '1440p', label: '1440p' },
+      { value: '1080p', label: '1080p' },
+      { value: '720p', label: '720p' },
+      { value: '480p', label: '480p' },
+      { value: '360p', label: '360p' }
+    ],
+    desc: 'Preferred video quality'
+  },
+  /**
+   * Older LG panels decode AV1 poorly; pinning VP9 or AVC can turn a stuttering
+   * video into a smooth one. Audio formats are never filtered.
+   */
+  videoPreferredCodec: {
+    type: 'enum',
+    default: 'any',
+    values: [
+      { value: 'any', label: 'Any' },
+      { value: 'av01', label: 'AV1' },
+      { value: 'vp9', label: 'VP9' },
+      { value: 'avc1', label: 'H.264 (AVC)' }
+    ],
+    desc: 'Preferred video codec'
   },
   /**
    * Reset to 1 on every launch — see the note in `src/playback-speed.ts`. The
@@ -308,14 +332,23 @@ function validateValue(option: ConfigOption, value: unknown): boolean {
 /**
  * Config keys that have been renamed. Maps an obsolete key to a function that
  * folds its stored value into the current schema.
- *
- * Empty for now — this is where e.g. `forceHighResVideo` -> `preferredVideoQuality`
- * will live once that key exists.
  */
 const renames: {
   from: string;
   apply: (oldValue: unknown, into: Partial<ConfigValues>) => void;
-}[] = [];
+}[] = [
+  {
+    // `forceHighResVideo` was a boolean meaning "always pick the top quality
+    // on offer", which is what `2160p` now does: the resolver falls back to the
+    // best available below the target, so a target above what a video has still
+    // ends up at its maximum. `false` maps to `auto`, the default, so it is
+    // left alone rather than written out.
+    from: 'forceHighResVideo',
+    apply: (oldValue, into) => {
+      if (oldValue === true) into.preferredVideoQuality = '2160p';
+    }
+  }
+];
 
 function migrateStoredConfig(raw: unknown): Partial<ConfigValues> {
   const migrated: Partial<ConfigValues> = {};

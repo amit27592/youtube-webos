@@ -127,7 +127,8 @@ function createOptionsPanel() {
   elmContainer.appendChild(createConfigCheckbox('hideLogo'));
   elmContainer.appendChild(createConfigCheckbox('showWatch'));
   elmContainer.appendChild(createConfigCheckbox('removeShorts'));
-  elmContainer.appendChild(createConfigCheckbox('forceHighResVideo'));
+  // `forceHighResVideo` became the `preferredVideoQuality` enum, which this
+  // checkbox-only panel cannot render. Advanced Settings has it.
   elmContainer.appendChild(createConfigCheckbox('removeEndscreen'));
   elmContainer.appendChild(createConfigCheckbox('autoAccountSelect'));
   elmContainer.appendChild(createConfigCheckbox('enableSponsorBlock'));

@@ -116,7 +116,11 @@ export const settingsTree: SettingsGroup = {
           icon: 'SLOW_MOTION_VIDEO'
         }),
         option('enableSpeedControlsButton', { icon: 'SLOW_MOTION_VIDEO' }),
-        option('forceHighResVideo', { icon: 'HD' }),
+        option('preferredVideoQuality', { icon: 'HD' }),
+        option('videoPreferredCodec', {
+          subtitle: 'Pin a codec if playback stutters',
+          icon: 'HD'
+        }),
         option('removeEndscreen', { icon: 'CLOSE' }),
         option('removeShorts', { icon: 'SHORTS' })
       ]
