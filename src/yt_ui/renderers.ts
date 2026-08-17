@@ -261,18 +261,33 @@ export function ShelfRenderer(
   };
 }
 
-/** A single card within a {@link ShelfRenderer}. */
-export function TileRenderer(title: string, onSelectCommand: Command) {
-  return {
-    tileRenderer: {
-      contentType: 'TILE_CONTENT_TYPE_VIDEO',
-      metadata: {
-        tileMetadataRenderer: { title: simpleText(title) }
-      },
-      onSelectCommand,
-      style: 'TILE_STYLE_YTLR_DEFAULT'
-    }
+/**
+ * A single card within a {@link ShelfRenderer}.
+ *
+ * The original takes no thumbnail, which leaves a card that is all text. Any
+ * tile built from a real video has one to hand, so it is accepted here.
+ */
+export function TileRenderer(
+  title: string,
+  onSelectCommand: Command,
+  thumbs?: readonly (string | Thumbnail)[]
+) {
+  const tileRenderer: Record<string, unknown> = {
+    contentType: 'TILE_CONTENT_TYPE_VIDEO',
+    metadata: {
+      tileMetadataRenderer: { title: simpleText(title) }
+    },
+    onSelectCommand,
+    style: 'TILE_STYLE_YTLR_DEFAULT'
   };
+
+  if (thumbs && thumbs.length > 0) {
+    tileRenderer.header = {
+      tileHeaderRenderer: { thumbnail: thumbnails(thumbs) }
+    };
+  }
+
+  return { tileRenderer };
 }
 
 /**

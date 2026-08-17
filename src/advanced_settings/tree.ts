@@ -122,7 +122,13 @@ export const settingsTree: SettingsGroup = {
           icon: 'HD'
         }),
         option('removeEndscreen', { icon: 'CLOSE' }),
-        option('removeShorts', { icon: 'SHORTS' })
+        option('removeShorts', { icon: 'SHORTS' }),
+        option('enableVideoQueue', {
+          title: 'Video queue',
+          subtitle: 'Long-press a video to queue it',
+          icon: 'PLAYLIST_ADD'
+        }),
+        option('enableLongPress', { icon: 'MORE_VERT' })
       ]
     },
     {

@@ -151,6 +151,20 @@ const configOptions = {
     default: false,
     desc: 'Replace thumbnails too (DeArrow)'
   },
+  enableVideoQueue: {
+    type: 'boolean',
+    default: true,
+    desc: 'Queue videos from the long-press menu'
+  },
+  /**
+   * Only governs building a long-press menu for tiles that don't already have
+   * one; tiles that do get the queue entry appended regardless.
+   */
+  enableLongPress: {
+    type: 'boolean',
+    default: true,
+    desc: 'Add a long-press menu to tiles without one'
+  },
   hideLogo: {
     type: 'boolean',
     default: false,

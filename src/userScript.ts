@@ -31,6 +31,7 @@ import './watch.js';
 import './video-quality';
 import './video-codec';
 import './dearrow';
+import './video-queue';
 import './chapters';
 import './playback-speed';
 import './lang-settings-fix';

@@ -27,6 +27,8 @@ function diffPlayerState(
 interface EventMap {
   newVideo: CustomEvent<VideoID>;
   playbackStart: CustomEvent<undefined>;
+  /** The video reached its end on its own, rather than being navigated away from. */
+  playbackEnded: CustomEvent<undefined>;
 }
 
 export enum PlayerMode {
@@ -70,6 +72,10 @@ class PlayerManager
 
     if (diff.isPlaying) {
       this.dispatchEvent(new TypedCustomEvent('playbackStart'));
+    }
+
+    if (diff.isEnded) {
+      this.dispatchEvent(new TypedCustomEvent('playbackEnded'));
     }
   };
 
