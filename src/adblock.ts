@@ -2,6 +2,7 @@
 // https://github.com/reisxd/TizenTube/blob/3f28fc3d/mods/features/adblock.js
 
 import { configRead } from './config';
+import { addJsonParseHandler } from './hooks/json-parse';
 
 /**
  * This is a minimal reimplementation of the following uBlock Origin rule:
@@ -15,7 +16,7 @@ import { configRead } from './config';
  * unguarded. We have no evidence it does, and `delete` is what has been
  * shipping, so we keep it.
  *
- * The parse result is freshly constructed by `origParse`, so mutating it here
+ * The parse result is freshly constructed by `JSON.parse`, so mutating it here
  * cannot hit the frozen-object problem that `22e227e` fixed for the
  * `JSON.stringify` hook — no cloning is needed or wanted on this path.
  */
@@ -215,18 +216,4 @@ function processResponse(r: unknown): void {
   cleanAllSections(response);
 }
 
-const origParse = JSON.parse;
-
-JSON.parse = function (this: unknown, ...args: [string, ...unknown[]]) {
-  const r = origParse.apply(this, args as Parameters<typeof JSON.parse>);
-
-  // A throw here would propagate out of every `JSON.parse` in the app, so an
-  // unexpected response shape must never be able to take the app down with it.
-  try {
-    processResponse(r);
-  } catch (e) {
-    console.error('[adblock] Error while processing a JSON response:', e);
-  }
-
-  return r;
-};
+addJsonParseHandler('adblock', processResponse);
