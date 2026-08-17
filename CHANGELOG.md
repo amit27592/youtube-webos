@@ -12,17 +12,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Block ads on pages that were previously uncovered: infinite-scroll continuations, the Subscriptions/Explore tabs, and the watch page's related videos.
 - Option to hide the "Includes paid promotion" overlay (`enablePaidPromotionOverlay`).
 - Option to hide sign-in reminder nags (`enableSigninReminder`).
+- **Advanced Settings**, a settings panel built from YouTube's own renderers, replacing the HTML overlay on the green button. Also reachable from an "Advanced Settings" entry in YouTube's own settings screen.
+- SponsorBlock: `filler` and highlight (`poi_highlight`) categories, a manual-skip mode that offers a "Skip" button instead of skipping for you (`sponsorBlockManualSkips`), on-screen skip announcements (`enableSponsorBlockToasts`), and support for YouTube TV's newer player layout.
+- Chapter markers on the scrubber, built from timestamps in the video description (`enableChapters`).
+- Playback speed control, from a button in the player and from YouTube's own playback settings entry (`videoSpeed`, `speedSettingsIncrement`, `enableSpeedControlsButton`). The speed resets to 1x when the app restarts.
 
 ### Changed
 
 - Config entries now declare a type (`boolean` / `enum` / `number` / `multi`), so settings UI can be generated from the schema. Stored values that don't match their declared type are discarded and the default applies.
 - `resolveCommand` hooks can now be stacked per command key, and named `customAction`s can be registered and dispatched from YouTube's own renderers.
 - YouTube's native settings screen can now write our config keys via `setClientSettingEndpoint`.
+- SponsorBlock now follows the player rather than the URL, so it no longer attaches to home-screen preview playback and no longer polls for the `<video>` element.
 
 ### Fixed
 
 - An unexpected API response shape can no longer throw out of the ad blocker's `JSON.parse` hook and take the app down with it.
 - "Upgrade thumbnail quality" could not be turned off again without a restart.
+- SponsorBlock: a skip landing within a second of the end of a video no longer triggers the endscreen and autoplay.
+- SponsorBlock: returning to a just-skipped segment no longer loops between the skip and whatever put playback back.
+- SponsorBlock: the segment overlay is restored when YouTube replaces the progress bar.
 
 ### Removed
 

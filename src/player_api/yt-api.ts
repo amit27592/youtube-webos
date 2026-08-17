@@ -78,4 +78,15 @@ export interface YTPlayer extends HTMLElement {
   isInline(): boolean;
 
   getVideoStats(): VideoStats;
+
+  /**
+   * Playback rate, where `1` is normal speed.
+   *
+   * Going through the player rather than the `<video>` element's
+   * `playbackRate` means the setting survives the player swapping its media
+   * element, which it does between videos and when changing quality.
+   */
+  getPlaybackRate(): number;
+
+  setPlaybackRate(rate: number): void;
 }

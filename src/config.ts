@@ -152,6 +152,32 @@ const configOptions = {
     default: false,
     desc: 'Force max resolution video playback'
   },
+  /**
+   * Reset to 1 on every launch — see the note in `src/playback-speed.ts`. The
+   * key exists so the picker can round-trip through config and the current
+   * speed is visible in Advanced Settings.
+   */
+  videoSpeed: {
+    type: 'number',
+    default: 1,
+    min: 0.25,
+    max: 3,
+    step: 0.25,
+    desc: 'Playback speed'
+  },
+  speedSettingsIncrement: {
+    type: 'number',
+    default: 0.25,
+    min: 0.05,
+    max: 0.5,
+    step: 0.05,
+    desc: 'Playback speed step'
+  },
+  enableSpeedControlsButton: {
+    type: 'boolean',
+    default: true,
+    desc: 'Show a speed button in the player'
+  },
   enableChapters: {
     type: 'boolean',
     default: true,

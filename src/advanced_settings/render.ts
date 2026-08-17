@@ -170,7 +170,11 @@ function rowForNode(
     );
   }
 
-  const subtitle = node.subtitle ?? valueSummary(node.key, option);
+  // The current value leads: on a row you have to open to change, it is the
+  // thing worth reading at a glance. Any note from the tree follows it.
+  const subtitle = [valueSummary(node.key, option), node.subtitle]
+    .filter(Boolean)
+    .join(' — ');
 
   return buttonItem(
     { title, ...(subtitle && { subtitle }) },

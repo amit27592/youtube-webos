@@ -107,6 +107,15 @@ export const settingsTree: SettingsGroup = {
       children: [
         option('enablePreviews', { icon: 'VOLUME_UP' }),
         option('enableChapters', { icon: 'PLAYLIST_PLAY' }),
+        option('videoSpeed', {
+          subtitle: 'Resets to 1x when the app restarts',
+          icon: 'SLOW_MOTION_VIDEO'
+        }),
+        option('speedSettingsIncrement', {
+          title: 'Speed picker step',
+          icon: 'SLOW_MOTION_VIDEO'
+        }),
+        option('enableSpeedControlsButton', { icon: 'SLOW_MOTION_VIDEO' }),
         option('forceHighResVideo', { icon: 'HD' }),
         option('removeEndscreen', { icon: 'CLOSE' }),
         option('removeShorts', { icon: 'SHORTS' })
