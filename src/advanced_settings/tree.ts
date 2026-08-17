@@ -85,9 +85,19 @@ export const settingsTree: SettingsGroup = {
             }),
             option('enableSponsorBlockPreview', {
               title: 'Preview / recap'
+            }),
+            option('enableSponsorBlockFiller', {
+              title: 'Tangents / filler'
             })
           ]
-        }
+        },
+        option('sponsorBlockManualSkips', {
+          title: 'Ask before skipping',
+          subtitle: 'Show a button instead of skipping automatically',
+          icon: 'QUESTION_CIRCLE'
+        }),
+        option('enableSponsorBlockHighlight', { icon: 'SKIP_NEXT' }),
+        option('enableSponsorBlockToasts', { icon: 'INFO' })
       ]
     },
     {

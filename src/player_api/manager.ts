@@ -107,12 +107,6 @@ export async function getPlayerManager(): Promise<PlayerManager> {
     instance = new PlayerManager(player);
   }
 
-  instance.addEventListener('playbackStart', function (event) {
-    event.type;
-    event.currentTarget?.currentVideoID;
-    event.detail;
-  });
-
   return instance;
 }
 

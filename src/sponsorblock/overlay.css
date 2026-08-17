@@ -1,0 +1,47 @@
+/*
+ * Positioning for the segment overlay in YouTube TV's classic player layout.
+ *
+ * Done in CSS rather than with `getBoundingClientRect` so the overlay tracks
+ * the progress bar as it moves and resizes -- notably when it grows on focus,
+ * and when chapter markers change its layout. The newer player layout has no
+ * equivalent hooks and is positioned from measurements instead; see
+ * `./overlay.ts`.
+ */
+
+.ytaf-sponsorblock-segment-container {
+  top: 0%;
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+  position: absolute;
+  overflow: hidden;
+}
+
+/* Fix: progress bar w/ chapter markers uses a different layout */
+[idomkey='player-bar-renderer']
+  :not([idomkey='slider'])
+  .ytaf-sponsorblock-segment-container {
+  top: 0.1875rem;
+  height: 75%;
+}
+
+/* Expand to overflow progress bar when focused */
+[idomkey='progress-bar'].zylon-focus .ytaf-sponsorblock-segment-container {
+  top: -25%;
+  height: 150%;
+}
+
+.ytaf-sponsorblock-segment {
+  opacity: 0.7;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  border-radius: 9001px;
+  display: inline-block;
+}
+
+/* Allow overlay segments to overflow */
+[idomkey='slider'],
+[idomkey='progress-bar'] {
+  overflow: unset !important;
+}

@@ -103,6 +103,40 @@ const configOptions = {
     default: false,
     desc: 'Skip recaps and previews'
   },
+  enableSponsorBlockFiller: {
+    type: 'boolean',
+    default: false,
+    desc: 'Skip tangents and filler'
+  },
+  enableSponsorBlockHighlight: {
+    type: 'boolean',
+    default: true,
+    desc: 'Offer to skip to the highlight'
+  },
+  enableSponsorBlockToasts: {
+    type: 'boolean',
+    default: true,
+    desc: 'Announce skips on screen'
+  },
+  /**
+   * Categories that prompt instead of skipping automatically. Only has an
+   * effect for categories that are enabled for skipping at all.
+   */
+  sponsorBlockManualSkips: {
+    type: 'multi',
+    default: ['intro', 'outro', 'filler'],
+    values: [
+      { value: 'sponsor', label: 'Sponsor' },
+      { value: 'intro', label: 'Intro / intermission' },
+      { value: 'outro', label: 'Endcards / credits' },
+      { value: 'interaction', label: 'Interaction reminder' },
+      { value: 'selfpromo', label: 'Unpaid / self promotion' },
+      { value: 'music_offtopic', label: 'Non-music section' },
+      { value: 'preview', label: 'Preview / recap' },
+      { value: 'filler', label: 'Tangents / filler' }
+    ],
+    desc: 'Ask before skipping'
+  },
   hideLogo: {
     type: 'boolean',
     default: false,
@@ -197,9 +231,15 @@ export function configHasKey(key: string): key is ConfigKey {
   return configExists(key);
 }
 
+// Multi-value defaults are declared as readonly tuples, which `ConfigValues`
+// widens to mutable arrays; each key gets its own copy so a caller cannot
+// mutate the schema's literal through a read.
 const defaultConfig = Object.fromEntries(
-  Object.entries(configOptions).map(([k, v]) => [k, v.default])
-) as ConfigValues;
+  Object.entries(configOptions).map(([k, v]) => [
+    k,
+    Array.isArray(v.default) ? [...v.default] : v.default
+  ])
+) as unknown as ConfigValues;
 
 const configFrags = Object.fromEntries(
   Object.keys(configOptions).map((k) => [k, new DocumentFragment()])

@@ -21,7 +21,7 @@ import './advanced_settings/index';
 import './adblock';
 import './hooks/json-stringify';
 import './shorts.js';
-import './sponsorblock.js';
+import './sponsorblock/index';
 import './ui.js';
 import './font-fix.css';
 import './thumbnail-quality';
