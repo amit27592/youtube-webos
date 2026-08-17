@@ -155,7 +155,13 @@ export const settingsTree: SettingsGroup = {
         option('focusContainerColor', { icon: 'SPARKLE' }),
         option('enableScreenDimming', { icon: 'BRIGHTNESS_LOW' }),
         option('dimmingTimeout', { icon: 'CLOCK' }),
-        option('dimmingOpacity', { icon: 'BRIGHTNESS_LOW' })
+        option('dimmingOpacity', { icon: 'BRIGHTNESS_LOW' }),
+        option('enableHideWatchedVideos', {
+          title: 'Hide watched videos',
+          icon: 'VISIBILITY_OFF'
+        }),
+        option('hideWatchedVideosThreshold', { icon: 'VISIBILITY_OFF' }),
+        option('hideWatchedVideosPages', { icon: 'VISIBILITY_OFF' })
       ]
     },
     {

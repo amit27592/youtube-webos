@@ -190,6 +190,36 @@ const configOptions = {
     step: 0.1,
     desc: 'How much to dim'
   },
+  enableHideWatchedVideos: {
+    type: 'boolean',
+    default: false,
+    desc: 'Hide videos you have already watched'
+  },
+  hideWatchedVideosThreshold: {
+    type: 'number',
+    default: 80,
+    min: 10,
+    max: 100,
+    step: 5,
+    desc: 'Watched percentage that counts as finished'
+  },
+  /**
+   * Per-page, because hiding what you have seen is right on a subscriptions
+   * feed and wrong on a channel page, where it makes a series look like it has
+   * holes in it.
+   */
+  hideWatchedVideosPages: {
+    type: 'multi',
+    default: ['subscriptions'],
+    values: [
+      { value: 'home', label: 'Home' },
+      { value: 'subscriptions', label: 'Subscriptions' },
+      { value: 'search', label: 'Search' },
+      { value: 'library', label: 'Library' },
+      { value: 'explore', label: 'Explore' }
+    ],
+    desc: 'Pages to hide watched videos on'
+  },
   hideLogo: {
     type: 'boolean',
     default: false,

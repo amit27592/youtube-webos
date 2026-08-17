@@ -30,6 +30,7 @@ import './yt-fixes.css';
 import './clock';
 import './theme';
 import './screen-dim';
+import './hide-watched';
 import './video-quality';
 import './video-codec';
 import './dearrow';
