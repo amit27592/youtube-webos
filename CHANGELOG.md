@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+### Added
+
+- Restore features YouTube disables when it classifies the TV as low-end: video previews with sound (`enablePreviews`) and full UI animation quality (`enableFixedUI`).
+- Block ads on pages that were previously uncovered: infinite-scroll continuations, the Subscriptions/Explore tabs, and the watch page's related videos.
+- Option to hide the "Includes paid promotion" overlay (`enablePaidPromotionOverlay`).
+- Option to hide sign-in reminder nags (`enableSigninReminder`).
+
+### Changed
+
+- Config entries now declare a type (`boolean` / `enum` / `number` / `multi`), so settings UI can be generated from the schema. Stored values that don't match their declared type are discarded and the default applies.
+- `resolveCommand` hooks can now be stacked per command key, and named `customAction`s can be registered and dispatched from YouTube's own renderers.
+- YouTube's native settings screen can now write our config keys via `setClientSettingEndpoint`.
+
+### Fixed
+
+- An unexpected API response shape can no longer throw out of the ad blocker's `JSON.parse` hook and take the app down with it.
+- "Upgrade thumbnail quality" could not be turned off again without a restart.
+
+### Removed
+
+- **Dropped support for webOS 1, 2 and 3.** The build target floor is now Chrome 53 (webOS 4.x). This is a prerequisite for porting features from [TizenTube](https://github.com/reisxd/TizenTube), which targets Chrome 47. Users on webOS 1–3 should stay on [0.5.3](https://github.com/webosbrew/youtube-webos/releases/tag/v0.5.3).
+
 ## [0.5.3] - 2026/04/18
 
 ### Fixed
