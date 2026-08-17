@@ -184,6 +184,12 @@ function showOptionsPanel(visible) {
   }
 }
 
+/**
+ * The green button now opens Advanced Settings (`src/advanced_settings/`)
+ * instead of this panel, which stays reachable only through here until that
+ * panel's parity has been confirmed on-device. Once it has, this file and
+ * `ui.css` go away — see docs/tizentube-port-plan.md, Phase 4.
+ */
 window.ytaf_showOptionsPanel = showOptionsPanel;
 
 const eventHandler = (evt) => {
@@ -195,18 +201,7 @@ const eventHandler = (evt) => {
     evt.defaultPrevented
   );
 
-  if (getKeyColor(evt.charCode) === 'green') {
-    console.debug('Taking over!');
-
-    evt.preventDefault();
-    evt.stopPropagation();
-
-    if (evt.type === 'keydown') {
-      // Toggle visibility.
-      showOptionsPanel(!optionsPanelVisible);
-    }
-    return false;
-  } else if (getKeyColor(evt.charCode) === 'blue') {
+  if (getKeyColor(evt.charCode) === 'blue') {
     evt.preventDefault();
     evt.stopPropagation();
 

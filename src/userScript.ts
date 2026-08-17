@@ -17,9 +17,7 @@ import './app_api/index';
 // and hooks run in registration order.
 import './app_api/client-settings';
 import './enable-features';
-// Registers `window.__ytaf_yt_ui_demo__` for verifying the renderer toolkit
-// on-device. Remove once a real feature consumes `yt_ui`.
-import './yt_ui/harness';
+import './advanced_settings/index';
 import './adblock';
 import './hooks/json-stringify';
 import './shorts.js';

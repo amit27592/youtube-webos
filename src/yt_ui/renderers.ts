@@ -9,6 +9,29 @@ import {
   type Thumbnail
 } from './types';
 
+/**
+ * Writes a client setting. Our own settings ride this command too — see
+ * `src/app_api/client-settings.ts`, which routes settings named after one of
+ * our config keys into the config store.
+ *
+ * `arrayValue` toggles membership rather than replacing the list, matching how
+ * YouTube's own multi-select renderers report a change.
+ */
+export function setClientSetting(
+  item: string,
+  value:
+    | { boolValue: boolean }
+    | { stringValue: string }
+    | { intValue: string }
+    | { arrayValue: string }
+): Command {
+  return {
+    setClientSettingEndpoint: {
+      settingDatas: [{ clientSettingEnum: { item }, ...value }]
+    }
+  };
+}
+
 export interface ItemLabel {
   title: string;
   subtitle?: string;
