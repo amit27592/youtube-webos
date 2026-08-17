@@ -170,6 +170,36 @@ const configOptions = {
     default: false,
     desc: 'Hide YouTube logo'
   },
+  /**
+   * A short list rather than TizenTube's free-form colour strings: a remote has
+   * no colour picker, and a fixed list can't inject CSS. See `src/theme.ts`.
+   */
+  routeColor: {
+    type: 'enum',
+    default: 'default',
+    values: [
+      { value: 'default', label: 'Default' },
+      { value: 'black', label: 'Black' },
+      { value: 'grey', label: 'Dark grey' },
+      { value: 'navy', label: 'Navy' },
+      { value: 'maroon', label: 'Maroon' },
+      { value: 'forest', label: 'Forest' }
+    ],
+    desc: 'Background colour'
+  },
+  focusContainerColor: {
+    type: 'enum',
+    default: 'default',
+    values: [
+      { value: 'default', label: 'Default' },
+      { value: 'black', label: 'Black' },
+      { value: 'grey', label: 'Dark grey' },
+      { value: 'navy', label: 'Navy' },
+      { value: 'maroon', label: 'Maroon' },
+      { value: 'forest', label: 'Forest' }
+    ],
+    desc: 'Sidebar highlight colour'
+  },
   enableClock: {
     type: 'boolean',
     default: false,

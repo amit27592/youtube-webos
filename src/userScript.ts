@@ -28,6 +28,7 @@ import './thumbnail-quality';
 import './screensaver-fix';
 import './yt-fixes.css';
 import './clock';
+import './theme';
 import './video-quality';
 import './video-codec';
 import './dearrow';

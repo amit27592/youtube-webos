@@ -150,7 +150,9 @@ export const settingsTree: SettingsGroup = {
         option('hideLogo', { icon: 'YOUTUBE_LOGO' }),
         option('enableClock', { icon: 'CLOCK' }),
         option('clock12Hour', { icon: 'CLOCK' }),
-        option('clockShowSeconds', { icon: 'CLOCK' })
+        option('clockShowSeconds', { icon: 'CLOCK' }),
+        option('routeColor', { icon: 'SPARKLE' }),
+        option('focusContainerColor', { icon: 'SPARKLE' })
       ]
     },
     {
