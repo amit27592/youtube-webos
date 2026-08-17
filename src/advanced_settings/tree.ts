@@ -132,6 +132,15 @@ export const settingsTree: SettingsGroup = {
       children: [
         option('enableFixedUI', { icon: 'SPARKLE' }),
         option('upgradeThumbnails', { icon: 'PHOTO_CAMERA' }),
+        option('enableDeArrow', {
+          title: 'DeArrow titles',
+          subtitle: 'Community titles; slows browsing slightly',
+          icon: 'EDIT'
+        }),
+        option('enableDeArrowThumbnails', {
+          title: 'DeArrow thumbnails',
+          icon: 'PHOTO_CAMERA'
+        }),
         option('hideLogo', { icon: 'YOUTUBE_LOGO' }),
         option('showWatch', { icon: 'CLOCK' })
       ]

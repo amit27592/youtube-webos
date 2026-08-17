@@ -8,6 +8,26 @@ export type FetchTarget = Request | StringConvertible;
 
 let registry: FetchRegistry | null = null;
 
+/**
+ * A hook that runs after a response arrives but *before* the app is handed it.
+ *
+ * Unlike the `response` event, this is awaited — which is the whole point of
+ * it, and also its cost: whatever it does is added to the latency of the
+ * request. It exists so a feature that needs to be applied synchronously
+ * during `JSON.parse` can populate its cache first, and it is not the right
+ * tool for anything that can be done after the fact.
+ *
+ * An interceptor must not read the body destructively: clone first. Throwing
+ * is contained and does not fail the request.
+ */
+export type ResponseInterceptor = (res: Response, url: URL) => Promise<void>;
+
+const interceptors: { name: string; fn: ResponseInterceptor }[] = [];
+
+export function addResponseInterceptor(name: string, fn: ResponseInterceptor) {
+  interceptors.push({ name, fn });
+}
+
 export interface RequestInfo {
   url: URL;
   resource: FetchTarget;
@@ -85,6 +105,16 @@ export class FetchRegistry extends CustomEventTarget<EventMap> {
 
     // @ts-expect-error
     const res = await this.#originalFetch(resource, init);
+
+    if (interceptors.length > 0) {
+      await Promise.all(
+        interceptors.map(({ name, fn }) =>
+          fn(res, url).catch((e: unknown) => {
+            console.error(`[fetch] Interceptor "${name}" threw:`, e);
+          })
+        )
+      );
+    }
 
     if (window.__ytaf_debug__) {
       console.debug(`Response ${this.#fetchCount}:`, res);

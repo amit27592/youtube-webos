@@ -137,6 +137,20 @@ const configOptions = {
     ],
     desc: 'Ask before skipping'
   },
+  /**
+   * Off by default, unlike TizenTube. It changes what titles you see, and it
+   * adds a network round trip to browse requests — see `src/dearrow.ts`.
+   */
+  enableDeArrow: {
+    type: 'boolean',
+    default: false,
+    desc: 'Replace clickbait titles (DeArrow)'
+  },
+  enableDeArrowThumbnails: {
+    type: 'boolean',
+    default: false,
+    desc: 'Replace thumbnails too (DeArrow)'
+  },
   hideLogo: {
     type: 'boolean',
     default: false,
