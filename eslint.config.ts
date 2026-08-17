@@ -89,7 +89,8 @@ const configs = [
 
   {
     // `ignores` field must be in the very bottom config.
-    ignores: ['dist/**/*', '**/*-polyfill.*']
+    // `reference/` holds gitignored upstream clones (see docs/tizentube-port-plan.md).
+    ignores: ['dist/**/*', 'reference/**/*', '**/*-polyfill.*']
   }
 ] as const satisfies Linter.Config[];
 

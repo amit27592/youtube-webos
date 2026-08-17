@@ -3,3 +3,6 @@
 /dist/
 .DS_Store
 /.vscode/
+
+# Local reference clone of TizenTube (see docs/tizentube-port-plan.md)
+/reference/

@@ -1,2 +1,5 @@
 *-polyfill.*
 pnpm-lock.yaml
+
+# Gitignored upstream clones (see docs/tizentube-port-plan.md)
+reference/

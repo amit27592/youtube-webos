@@ -40,6 +40,7 @@
 
 ## Requirements
 
+- **webOS 4.0 or newer.** webOS 1–3 are no longer supported as of the next release; the last release supporting them is [0.5.3](https://github.com/webosbrew/youtube-webos/releases/tag/v0.5.3).
 - Uninstall the official YouTube app before installing this one.
 
 ---
