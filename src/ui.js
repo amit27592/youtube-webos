@@ -5,7 +5,7 @@ import {
   configRead,
   configWrite,
   configGetDesc
-} from './config.js';
+} from './config';
 import './ui.css';
 import { requireElement } from './player_api/helpers';
 
