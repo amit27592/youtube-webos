@@ -29,6 +29,7 @@ import './screensaver-fix';
 import './yt-fixes.css';
 import './watch.js';
 import './video-quality';
+import './chapters';
 import './lang-settings-fix';
 import './remove-endscreen';
 import './hooks';

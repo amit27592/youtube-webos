@@ -152,6 +152,11 @@ const configOptions = {
     default: false,
     desc: 'Force max resolution video playback'
   },
+  enableChapters: {
+    type: 'boolean',
+    default: true,
+    desc: 'Show chapter markers from the description'
+  },
   removeEndscreen: {
     type: 'boolean',
     default: false,

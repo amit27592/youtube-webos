@@ -106,6 +106,7 @@ export const settingsTree: SettingsGroup = {
       icon: 'PLAY_ARROW',
       children: [
         option('enablePreviews', { icon: 'VOLUME_UP' }),
+        option('enableChapters', { icon: 'PLAYLIST_PLAY' }),
         option('forceHighResVideo', { icon: 'HD' }),
         option('removeEndscreen', { icon: 'CLOSE' }),
         option('removeShorts', { icon: 'SHORTS' })
