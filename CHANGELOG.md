@@ -16,8 +16,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - SponsorBlock: `filler` and highlight (`poi_highlight`) categories, a manual-skip mode that offers a "Skip" button instead of skipping for you (`sponsorBlockManualSkips`), on-screen skip announcements (`enableSponsorBlockToasts`), and support for YouTube TV's newer player layout.
 - Chapter markers on the scrubber, built from timestamps in the video description (`enableChapters`).
 - Playback speed control, from a button in the player and from YouTube's own playback settings entry (`videoSpeed`, `speedSettingsIncrement`, `enableSpeedControlsButton`). The speed resets to 1x when the app restarts.
+- Preferred video codec (`videoPreferredCodec`). Older LG panels decode AV1 in software, so pinning VP9 or H.264 can fix stutter.
+- DeArrow: community-submitted titles and thumbnails in place of clickbait (`enableDeArrow`, `enableDeArrowThumbnails`). Off by default; it changes what titles you see and adds a network round trip to browsing.
+- A video queue, built from the long-press menu on any tile (`enableVideoQueue`, `enableLongPress`). Queued videos appear as a shelf on the watch page and play in turn. Cleared when the app closes.
+- Clock options for a 12-hour display and for showing seconds (`clock12Hour`, `clockShowSeconds`).
+- Theme colours for the background and the sidebar's focus highlight (`routeColor`, `focusContainerColor`).
+- Option to skip the "Who's watching?" screen at startup (`enableWhosWatching`).
+- Screen dimming after a spell of inactivity, for OLED panels (`enableScreenDimming`, `dimmingTimeout`, `dimmingOpacity`). Never dims during playback.
+- Option to hide videos you have already watched (`enableHideWatchedVideos`, `hideWatchedVideosThreshold`, `hideWatchedVideosPages`). Applies to the subscriptions feed by default.
+- Option to hide sidebar entries, and to hide subscribed channels from it (`disabledSidebarContents`, `disableChannelsOnSidebar`).
 
 ### Changed
+
+- "Force max resolution video playback" becomes a **preferred video quality** setting (`preferredVideoQuality`: auto through 360p). When the exact resolution isn't on offer, the best one below it is used. An existing `forceHighResVideo: true` becomes `2160p`.
 
 - Config entries now declare a type (`boolean` / `enum` / `number` / `multi`), so settings UI can be generated from the schema. Stored values that don't match their declared type are discarded and the default applies.
 - `resolveCommand` hooks can now be stacked per command key, and named `customAction`s can be registered and dispatched from YouTube's own renderers.
