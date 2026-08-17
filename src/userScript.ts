@@ -38,6 +38,9 @@ import './dearrow';
 import './video-queue';
 import './chapters';
 import './playback-speed';
+// Must come after `playback-speed`: both hook `openPopupAction` to add an entry
+// to YouTube's playback settings popup, and hooks run in registration order.
+import './mini-player';
 import './lang-settings-fix';
 import './remove-endscreen';
 import './hooks';

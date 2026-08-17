@@ -359,6 +359,16 @@ const configOptions = {
     default: true,
     desc: 'Show chapter markers from the description'
   },
+  /**
+   * In-app only — webOS has no OS-level picture-in-picture. Off by default
+   * because it leans on YouTube internals that can move; see
+   * `src/mini-player.ts`.
+   */
+  enableMiniPlayer: {
+    type: 'boolean',
+    default: false,
+    desc: 'Enable the mini player'
+  },
   removeEndscreen: {
     type: 'boolean',
     default: false,

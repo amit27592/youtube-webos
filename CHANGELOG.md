@@ -25,6 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Screen dimming after a spell of inactivity, for OLED panels (`enableScreenDimming`, `dimmingTimeout`, `dimmingOpacity`). Never dims during playback.
 - Option to hide videos you have already watched (`enableHideWatchedVideos`, `hideWatchedVideosThreshold`, `hideWatchedVideosPages`). Applies to the subscriptions feed by default.
 - Option to hide sidebar entries, and to hide subscribed channels from it (`disabledSidebarContents`, `disableChannelsOnSidebar`).
+- A mini player: keep the current video playing in the corner while you browse for the next one (`enableMiniPlayer`). Toggled with the yellow button, from a button in the player, or from YouTube's own playback settings. In-app only — webOS has no OS-level picture-in-picture. Off by default, because it leans on YouTube internals that can move; if they do, the feature turns itself off and nothing else is affected.
 
 ### Changed
 

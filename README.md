@@ -32,9 +32,17 @@
 - YouTube Logo Removal
 - Remove end screens
 - Bypass account selector screen
+- Mini Player (🟨 Yellow button on remote)
 
 > [!NOTE]
 > Press the 🟩 **Green** button on your remote to access the configuration screen.
+
+> [!NOTE]
+> The 🟨 **Yellow** button toggles the mini player, which keeps the current video
+> playing in the corner of the screen while you browse. Enable it first under
+> **Playback → Mini player**; while it is disabled the button keeps its usual
+> YouTube behaviour. This is in-app only — it is not OS-level picture-in-picture,
+> and playback stops when you leave the app.
 
 ---
 

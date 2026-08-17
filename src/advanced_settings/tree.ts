@@ -128,7 +128,12 @@ export const settingsTree: SettingsGroup = {
           subtitle: 'Long-press a video to queue it',
           icon: 'PLAYLIST_ADD'
         }),
-        option('enableLongPress', { icon: 'MORE_VERT' })
+        option('enableLongPress', { icon: 'MORE_VERT' }),
+        option('enableMiniPlayer', {
+          title: 'Mini player',
+          subtitle: 'Keep playing in the corner; yellow button toggles it',
+          icon: 'SCREEN_SWITCH'
+        })
       ]
     },
     {
