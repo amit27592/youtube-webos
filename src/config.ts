@@ -165,6 +165,31 @@ const configOptions = {
     default: true,
     desc: 'Add a long-press menu to tiles without one'
   },
+  /**
+   * Aimed at OLED burn-in on a paused menu. See `src/screen-dim.ts`; unrelated
+   * to webOS's own screensaver.
+   */
+  enableScreenDimming: {
+    type: 'boolean',
+    default: false,
+    desc: 'Dim the screen when idle'
+  },
+  dimmingTimeout: {
+    type: 'number',
+    default: 30,
+    min: 5,
+    max: 300,
+    step: 5,
+    desc: 'Seconds of inactivity before dimming'
+  },
+  dimmingOpacity: {
+    type: 'number',
+    default: 0.5,
+    min: 0.1,
+    max: 0.9,
+    step: 0.1,
+    desc: 'How much to dim'
+  },
   hideLogo: {
     type: 'boolean',
     default: false,

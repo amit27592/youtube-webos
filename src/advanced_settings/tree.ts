@@ -152,7 +152,10 @@ export const settingsTree: SettingsGroup = {
         option('clock12Hour', { icon: 'CLOCK' }),
         option('clockShowSeconds', { icon: 'CLOCK' }),
         option('routeColor', { icon: 'SPARKLE' }),
-        option('focusContainerColor', { icon: 'SPARKLE' })
+        option('focusContainerColor', { icon: 'SPARKLE' }),
+        option('enableScreenDimming', { icon: 'BRIGHTNESS_LOW' }),
+        option('dimmingTimeout', { icon: 'CLOCK' }),
+        option('dimmingOpacity', { icon: 'BRIGHTNESS_LOW' })
       ]
     },
     {

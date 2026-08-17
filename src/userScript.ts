@@ -29,6 +29,7 @@ import './screensaver-fix';
 import './yt-fixes.css';
 import './clock';
 import './theme';
+import './screen-dim';
 import './video-quality';
 import './video-codec';
 import './dearrow';
