@@ -170,10 +170,20 @@ const configOptions = {
     default: false,
     desc: 'Hide YouTube logo'
   },
-  showWatch: {
+  enableClock: {
     type: 'boolean',
     default: false,
     desc: 'Display time in UI'
+  },
+  clock12Hour: {
+    type: 'boolean',
+    default: false,
+    desc: 'Use a 12-hour clock'
+  },
+  clockShowSeconds: {
+    type: 'boolean',
+    default: false,
+    desc: 'Show seconds on the clock'
   },
   preferredVideoQuality: {
     type: 'enum',
@@ -374,6 +384,13 @@ const renames: {
     from: 'forceHighResVideo',
     apply: (oldValue, into) => {
       if (oldValue === true) into.preferredVideoQuality = '2160p';
+    }
+  },
+  {
+    // Renamed with the clock rewrite; same meaning.
+    from: 'showWatch',
+    apply: (oldValue, into) => {
+      if (typeof oldValue === 'boolean') into.enableClock = oldValue;
     }
   }
 ];

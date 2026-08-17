@@ -148,7 +148,9 @@ export const settingsTree: SettingsGroup = {
           icon: 'PHOTO_CAMERA'
         }),
         option('hideLogo', { icon: 'YOUTUBE_LOGO' }),
-        option('showWatch', { icon: 'CLOCK' })
+        option('enableClock', { icon: 'CLOCK' }),
+        option('clock12Hour', { icon: 'CLOCK' }),
+        option('clockShowSeconds', { icon: 'CLOCK' })
       ]
     },
     {

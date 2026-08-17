@@ -27,7 +27,7 @@ import './font-fix.css';
 import './thumbnail-quality';
 import './screensaver-fix';
 import './yt-fixes.css';
-import './watch.js';
+import './clock';
 import './video-quality';
 import './video-codec';
 import './dearrow';
