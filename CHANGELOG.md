@@ -18,7 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Playback speed control, from a button in the player and from YouTube's own playback settings entry (`videoSpeed`, `speedSettingsIncrement`, `enableSpeedControlsButton`). The speed resets to 1x when the app restarts.
 - Preferred video codec (`videoPreferredCodec`). Older LG panels decode AV1 in software, so pinning VP9 or H.264 can fix stutter.
 - DeArrow: community-submitted titles and thumbnails in place of clickbait (`enableDeArrow`, `enableDeArrowThumbnails`). Off by default; it changes what titles you see and adds a network round trip to browsing.
-- A video queue, built from the long-press menu on any tile (`enableVideoQueue`, `enableLongPress`). Queued videos appear as a shelf on the watch page and play in turn. Cleared when the app closes.
+- A video queue, built from the long-press menu on any tile (`enableVideoQueue`, `enableLongPress`). Queued videos appear as a shelf on the watch page and play in turn — both when a video ends and when you press Next, which prefers the queue over YouTube's autoplay pick. Cleared when the app closes.
 - Clock options for a 12-hour display and for showing seconds (`clock12Hour`, `clockShowSeconds`).
 - Theme colours for the background and the sidebar's focus highlight (`routeColor`, `focusContainerColor`).
 - Option to skip the "Who's watching?" screen at startup (`enableWhosWatching`).

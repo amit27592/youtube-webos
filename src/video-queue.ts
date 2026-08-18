@@ -5,15 +5,18 @@ import { addJsonParseHandler } from './hooks/json-parse';
 import {
   customActionCommand,
   registerCustomAction,
-  ResolveCommandRegistry
+  ResolveCommandRegistry,
+  type ResolveCommandPayload
 } from './app_api/index';
 import { getPlayerManager, PlayerMode } from './player_api';
 import {
+  dispatch,
   longPressData,
   MenuServiceItemRenderer,
   playMenuItem,
   savePlaylistMenuItem,
   ShelfRenderer,
+  showToast,
   TileRenderer,
   watchLaterMenuItem
 } from './yt_ui/index';
@@ -42,8 +45,27 @@ import {
 const ADD_ACTION = 'ADD_TO_QUEUE';
 const CLEAR_ACTION = 'CLEAR_QUEUE';
 
+/** The signal YouTube's own "Next" button sends. */
+const PLAY_NEXT_SIGNAL = 'PLAYER_PLAY_NEXT';
+
+/**
+ * Re-renders the current page from a fresh response, without touching
+ * playback — which is how the queue shelf gets rebuilt after the queue changes
+ * under it.
+ */
+const RELOAD_SIGNAL = 'SOFT_RELOAD_PAGE';
+
+const SHELF_TITLE = 'Queued videos';
+
 /** Let the player settle before navigating; matches TizenTube's delay. */
 const ADVANCE_DELAY_MS = 500;
+
+/**
+ * How long one advance suppresses the next. A video ending can both raise
+ * `playbackEnded` and send {@link PLAY_NEXT_SIGNAL}; without this the queue
+ * would lose an entry to each.
+ */
+const ADVANCE_COOLDOWN_MS = 3000;
 
 export interface QueuedVideo {
   videoId: string;
@@ -61,13 +83,26 @@ export function queuedVideos(): QueuedVideo[] {
 }
 
 export function clearQueue() {
+  const had = queue.length > 0;
   queue.length = 0;
   console.info('[video-queue] Queue cleared');
+
+  showToast('Video queue', 'Queue cleared');
+
+  // The shelf is built when a page's response is parsed, so the tiles on screen
+  // outlive the queue they were built from: clearing without this leaves the
+  // queue looking untouched. The reload leaves playback alone.
+  if (had)
+    void dispatch({
+      clickTrackingParams: null,
+      signalAction: { signal: RELOAD_SIGNAL }
+    });
 }
 
 function enqueue(video: QueuedVideo) {
   if (queue.some((v) => v.videoId === video.videoId)) {
     console.info('[video-queue] Already queued:', video.videoId);
+    showToast('Video queue', `Already queued: ${video.title}`);
     return;
   }
 
@@ -76,6 +111,12 @@ function enqueue(video: QueuedVideo) {
     '[video-queue] Queued',
     video.title,
     `(${queue.length} waiting)`
+  );
+
+  showToast(
+    'Video queue',
+    queue.length === 1 ? 'Playing next' : `${queue.length} waiting`,
+    { thumbnails: video.thumbnails }
   );
 }
 
@@ -217,7 +258,7 @@ function queueShelf() {
 
   tiles.unshift(TileRenderer('Clear queue', customActionCommand(CLEAR_ACTION)));
 
-  return ShelfRenderer('Queued videos', tiles);
+  return ShelfRenderer(SHELF_TITLE, tiles);
 }
 
 // --- response patching -----------------------------------------------------
@@ -270,14 +311,50 @@ addJsonParseHandler('video-queue', (value) => {
             shelfHeaderRenderer?: { title?: { simpleText?: string } };
           };
         }
-      )?.shelfRenderer?.shelfHeaderRenderer?.title?.simpleText ===
-      'Queued videos'
+      )?.shelfRenderer?.shelfHeaderRenderer?.title?.simpleText === SHELF_TITLE
   );
 
   if (!already) pivot.contents.unshift(queueShelf());
 });
 
 // --- playback --------------------------------------------------------------
+
+let lastAdvance = 0;
+
+/**
+ * Plays the front of the queue, if there is one.
+ *
+ * @param delayMs Wait before navigating. Navigating the instant the player
+ *   reports the end of a video lands mid-teardown.
+ * @returns Whether the queue took the request. `true` with nothing dispatched
+ *   means an advance is already in flight — the caller should still treat the
+ *   request as handled.
+ */
+function advance(
+  registry: ResolveCommandRegistry,
+  reason: string,
+  delayMs = 0
+): boolean {
+  const next = queue[0];
+  if (!next) return false;
+
+  const now = Date.now();
+  if (now - lastAdvance < ADVANCE_COOLDOWN_MS) {
+    console.debug('[video-queue] Advance already in flight, ignoring', reason);
+    return true;
+  }
+  lastAdvance = now;
+
+  console.info(`[video-queue] ${reason}: playing`, next.title);
+
+  const play = () =>
+    registry.dispatchCommand(next.onSelectCommand as ResolveCommandPayload);
+
+  if (delayMs > 0) setTimeout(play, delayMs);
+  else play();
+
+  return true;
+}
 
 async function start() {
   const registry = await ResolveCommandRegistry.getInstance();
@@ -292,15 +369,22 @@ async function start() {
     if (!enabled()) return;
     if (manager.playerMode !== PlayerMode.NORMAL) return;
 
-    const next = queue[0];
-    if (!next) return;
+    advance(registry, 'Video ended', ADVANCE_DELAY_MS);
+  });
 
-    console.info('[video-queue] Advancing to', next.title);
+  // The "Next" button, which otherwise plays whatever YouTube has picked for
+  // autoplay — the queue is a more specific answer to the same question.
+  registry.setHook('signalAction', (next, payload, extra) => {
+    const signal = (payload.signalAction as { signal?: unknown } | undefined)
+      ?.signal;
 
-    // Navigating the instant the player reports the end lands mid-teardown.
-    setTimeout(() => {
-      registry.dispatchCommand(next.onSelectCommand as Record<string, unknown>);
-    }, ADVANCE_DELAY_MS);
+    if (!enabled() || signal !== PLAY_NEXT_SIGNAL) {
+      return next(payload, extra);
+    }
+
+    if (advance(registry, 'Next pressed')) return true;
+
+    return next(payload, extra);
   });
 }
 
