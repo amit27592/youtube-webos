@@ -14,7 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Option to hide sign-in reminder nags (`enableSigninReminder`).
 - **Advanced Settings**, a settings panel built from YouTube's own renderers, replacing the HTML overlay on the green button. Also reachable from an "Advanced Settings" entry in YouTube's own settings screen.
 - SponsorBlock: `filler` and highlight (`poi_highlight`) categories, a manual-skip mode that offers a "Skip" button instead of skipping for you (`sponsorBlockManualSkips`), on-screen skip announcements (`enableSponsorBlockToasts`), and support for YouTube TV's newer player layout.
-- Chapter markers on the scrubber, built from timestamps in the video description (`enableChapters`).
+- Chapter markers on the scrubber for videos YouTube does not chapter itself, built from timestamps in the video description (`enableChapters`). YouTube wants at least three chapters of at least ten seconds each; where it declines and the description says otherwise, this stands in.
 - Playback speed control, from a button in the player and from YouTube's own playback settings entry (`videoSpeed`, `speedSettingsIncrement`, `enableSpeedControlsButton`). The speed resets to 1x when the app restarts.
 - Preferred video codec (`videoPreferredCodec`). Older LG panels decode AV1 in software, so pinning VP9 or H.264 can fix stutter.
 - DeArrow: community-submitted titles and thumbnails in place of clickbait (`enableDeArrow`, `enableDeArrowThumbnails`). Off by default; it changes what titles you see and adds a network round trip to browsing.

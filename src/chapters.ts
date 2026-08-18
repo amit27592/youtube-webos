@@ -10,17 +10,23 @@ import { requireElement } from './player_api/helpers';
  * Chapter markers on the player scrubber, built from timestamps in the video
  * description.
  *
- * YouTube TV does not render chapters itself, but its player understands the
- * `macroMarkersListEntity` its phone and web clients use, so we can build one
- * and hand it over.
+ * This is now a fallback. YouTube TV ships and renders its own
+ * `macroMarkersListEntity` for videos whose chapters it recognises, so for most
+ * chaptered videos there is nothing for us to do -- and doing it anyway would
+ * mean two sets of markers for one video. We stand in only where YouTube sent
+ * no chapters of its own but the description says otherwise, which is where its
+ * rules are stricter than ours: it wants at least three chapters, each at least
+ * ten seconds long.
  *
- * TizenTube's version reads the description out of the watch-next response's
- * `videoMetadataRenderer`, and is disabled in their tree because YouTube
- * stopped populating it. We read `videoDetails.shortDescription` from the
- * player response instead, which is where the description still lives, and
- * deliver the entity through `resolveCommand` rather than by mutating a
- * response -- so this does not depend on the shape of the watch-next payload
- * at all.
+ * The description comes out of the watch-next response's description panel.
+ * TizenTube reads `videoMetadataRenderer` and is disabled in their tree because
+ * YouTube stopped populating it; `videoDetails.shortDescription` on the player
+ * response, which this used to read, has since gone the same way.
+ *
+ * Publishing takes both routes open to us: the marker bar is asked for by
+ * mutating the response, because that is the only thing that creates one, and
+ * the markers themselves go through `resolveCommand` afterwards, because they
+ * are not known until the player reports the duration.
  */
 
 export interface Chapter {
@@ -28,6 +34,19 @@ export interface Chapter {
   time: number;
   name: string;
 }
+
+/**
+ * The entity key YouTube publishes description chapters under -- an encoded
+ * `DESCRIPTION_CHAPTERS`, and so the same string for every video, replaced as
+ * each one loads.
+ *
+ * We publish under it too. A key of our own is not resolved by the marker bar:
+ * a bar pointed at `${videoID}-key` draws nothing however the entity is
+ * dispatched, while the same bar pointed here draws the chapters. Sharing the
+ * key is safe because we only publish for videos YouTube found no chapters in,
+ * so there is never an entity of its own here to displace.
+ */
+const ENTITY_KEY = 'EhRERVNDUklQVElPTl9DSEFQVEVSUyCSAigB';
 
 /**
  * Leading timestamp on a description line: `M:SS`, `MM:SS`, or `H:MM:SS`.
@@ -142,14 +161,12 @@ function marker(
 }
 
 function markerEntity(videoID: string, markers: unknown[]) {
-  const key = `${videoID}-key`;
-
   return {
-    entityKey: key,
+    entityKey: ENTITY_KEY,
     type: 'ENTITY_MUTATION_TYPE_REPLACE',
     payload: {
       macroMarkersListEntity: {
-        key,
+        key: ENTITY_KEY,
         externalVideoId: videoID,
         markersList: {
           markerType: 'MARKER_TYPE_CHAPTERS',
@@ -183,29 +200,144 @@ function markerEntity(videoID: string, markers: unknown[]) {
   };
 }
 
-/** Descriptions by video ID, harvested from player responses. */
-const descriptions = new Map<string, string>();
+// --- reading the watch-next response ---------------------------------------
+
+interface WatchNextResponse {
+  currentVideoEndpoint?: { watchEndpoint?: { videoId?: unknown } };
+  engagementPanels?: {
+    engagementPanelSectionListRenderer?: {
+      content?: {
+        structuredDescriptionContentRenderer?: {
+          items?: {
+            expandableVideoDescriptionBodyRenderer?: {
+              descriptionBodyText?: { runs?: { text?: unknown }[] };
+            };
+          }[];
+        };
+      };
+    };
+  }[];
+  frameworkUpdates?: {
+    entityBatchUpdate?: {
+      mutations?: {
+        payload?: {
+          macroMarkersListEntity?: {
+            externalVideoId?: unknown;
+            markersList?: { markerType?: unknown };
+          };
+        };
+      }[];
+    };
+  };
+  playerOverlays?: {
+    playerOverlayRenderer?: {
+      decoratedPlayerBarRenderer?: {
+        decoratedPlayerBarRenderer?: {
+          playerBar?: {
+            multiMarkersPlayerBarRenderer?: { visibleOnLoad?: { key: string } };
+          };
+        };
+      };
+    };
+  };
+}
+
+/**
+ * The description, rebuilt from the runs of the description panel. Timestamps
+ * are their own runs (YouTube makes them links), so only the concatenation is
+ * the text the user sees.
+ */
+function readDescription(response: WatchNextResponse): string | undefined {
+  for (const panel of response.engagementPanels ?? []) {
+    const items =
+      panel?.engagementPanelSectionListRenderer?.content
+        ?.structuredDescriptionContentRenderer?.items;
+
+    for (const item of items ?? []) {
+      const runs =
+        item?.expandableVideoDescriptionBodyRenderer?.descriptionBodyText?.runs;
+      if (!Array.isArray(runs)) continue;
+
+      const text = runs
+        .map((run) => (typeof run?.text === 'string' ? run.text : ''))
+        .join('');
+
+      if (text) return text;
+    }
+  }
+
+  return undefined;
+}
+
+/** Whether YouTube sent chapters of its own for this video. */
+function hasNativeChapters(response: WatchNextResponse, videoID: string) {
+  const mutations = response.frameworkUpdates?.entityBatchUpdate?.mutations;
+
+  return (mutations ?? []).some((mutation) => {
+    const entity = mutation?.payload?.macroMarkersListEntity;
+
+    return (
+      entity?.externalVideoId === videoID &&
+      entity.markersList?.markerType === 'MARKER_TYPE_CHAPTERS'
+    );
+  });
+}
+
+/**
+ * Asks the response for a marker bar of our own.
+ *
+ * `loadMarkersCommand` fills a bar in; it does not create one. The bar is built
+ * from the watch-next response, and a video YouTube found no chapters in
+ * arrives without one -- with no `decoratedPlayerBarRenderer` at all -- so
+ * publishing an entity on its own has nothing to draw into. This asks for the
+ * bar the native path would have asked for, pointed at {@link ENTITY_KEY}.
+ */
+function requestPlayerBar(response: WatchNextResponse) {
+  const overlay = ((response.playerOverlays ??= {}).playerOverlayRenderer ??=
+    {});
+  const decorated = (overlay.decoratedPlayerBarRenderer ??= {});
+  const bar = ((decorated.decoratedPlayerBarRenderer ??= {}).playerBar ??= {});
+
+  bar.multiMarkersPlayerBarRenderer = { visibleOnLoad: { key: ENTITY_KEY } };
+}
+
+/**
+ * Chapters by video ID, harvested from watch-next responses. Videos YouTube
+ * chaptered itself are recorded with none, which is what keeps us from adding a
+ * second set of markers to them.
+ */
+const chaptersByVideo = new Map<string, Chapter[]>();
 
 addJsonParseHandler('chapters', (value) => {
   if (typeof value !== 'object' || value === null) return;
 
-  const details = (value as { videoDetails?: Record<string, unknown> })
-    .videoDetails;
-  if (!details) return;
+  const response = value as WatchNextResponse;
+  const videoID = response.currentVideoEndpoint?.watchEndpoint?.videoId;
+  if (typeof videoID !== 'string') return;
 
-  const { videoId, shortDescription } = details;
+  const description = hasNativeChapters(response, videoID)
+    ? undefined
+    : readDescription(response);
 
-  if (typeof videoId === 'string' && typeof shortDescription === 'string') {
-    descriptions.set(videoId, shortDescription);
-  }
+  const chapters = description ? parseTimestamps(description) : [];
+  chaptersByVideo.set(videoID, chapters);
+
+  // An empty bar is worse than no bar, so only ask for one once there is
+  // something to put in it.
+  if (chapters.length > 0 && configRead('enableChapters'))
+    requestPlayerBar(response);
+
+  // The response can land after the player has already reported its duration,
+  // in which case this is the last chance to publish.
+  retryPublish?.();
 });
 
-async function publishChapters(videoID: string, durationMs: number) {
-  const description = descriptions.get(videoID);
-  if (!description) return;
+/** Set by {@link start}: a description arriving is a reason to try again. */
+let retryPublish: (() => void) | undefined;
 
-  const chapters = parseTimestamps(description);
-  if (chapters.length === 0) return;
+async function publishChapters(videoID: string, durationMs: number) {
+  const chapters = chaptersByVideo.get(videoID);
+  if (!chapters?.length) return;
 
   const markers = chapters.map((chapter, index) => {
     const next = chapters[index + 1];
@@ -249,6 +381,10 @@ async function start() {
     // until the duration is known.
     if (!(video.duration > 0)) return;
 
+    // Nothing has been read for this video yet: leave it for the retry the
+    // parse handler makes, rather than deciding it has no chapters.
+    if (!chaptersByVideo.has(videoID)) return;
+
     published = videoID;
     void publishChapters(videoID, video.duration * 1000);
   };
@@ -256,6 +392,7 @@ async function start() {
   manager.addEventListener('newVideo', publish);
   manager.addEventListener('playbackStart', publish);
   video.addEventListener('durationchange', publish);
+  retryPublish = publish;
 }
 
 void start();
