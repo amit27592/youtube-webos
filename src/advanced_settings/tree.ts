@@ -67,7 +67,7 @@ export const settingsTree: SettingsGroup = {
         {
           kind: 'group',
           title: 'Segments to skip',
-          icon: 'PLAYLIST_PLAY',
+          icon: 'FILTER',
           children: [
             option('enableSponsorBlockSponsor', { title: 'Sponsor' }),
             option('enableSponsorBlockIntro', {
@@ -94,7 +94,7 @@ export const settingsTree: SettingsGroup = {
         option('sponsorBlockManualSkips', {
           title: 'Ask before skipping',
           subtitle: 'Show a button instead of skipping automatically',
-          icon: 'QUESTION_CIRCLE'
+          icon: 'HELP_OUTLINE'
         }),
         option('enableSponsorBlockHighlight', { icon: 'SKIP_NEXT' }),
         option('enableSponsorBlockToasts', { icon: 'INFO' })
@@ -106,7 +106,7 @@ export const settingsTree: SettingsGroup = {
       icon: 'PLAY_ARROW',
       children: [
         option('enablePreviews', { icon: 'VOLUME_UP' }),
-        option('enableChapters', { icon: 'PLAYLIST_PLAY' }),
+        option('enableChapters', { icon: 'LIST' }),
         option('videoSpeed', {
           subtitle: 'Resets to 1x when the app restarts',
           icon: 'SLOW_MOTION_VIDEO'
@@ -116,17 +116,17 @@ export const settingsTree: SettingsGroup = {
           icon: 'SLOW_MOTION_VIDEO'
         }),
         option('enableSpeedControlsButton', { icon: 'SLOW_MOTION_VIDEO' }),
-        option('preferredVideoQuality', { icon: 'HD' }),
+        option('preferredVideoQuality', { icon: 'VIDEO_QUALITY' }),
         option('videoPreferredCodec', {
           subtitle: 'Pin a codec if playback stutters',
-          icon: 'HD'
+          icon: 'CLAPPERBOARD'
         }),
         option('removeEndscreen', { icon: 'CLOSE' }),
-        option('removeShorts', { icon: 'SHORTS' }),
+        option('removeShorts', { icon: 'YOUTUBE_SHORTS_FILL_24' }),
         option('enableVideoQueue', {
           title: 'Video queue',
           subtitle: 'Long-press a video to queue it',
-          icon: 'PLAYLIST_ADD'
+          icon: 'ADD_TO_PLAYLIST'
         }),
         option('enableLongPress', { icon: 'MORE_VERT' }),
         option('enableMiniPlayer', {
@@ -142,7 +142,7 @@ export const settingsTree: SettingsGroup = {
       icon: 'SETTINGS',
       children: [
         option('enableFixedUI', { icon: 'SPARKLE' }),
-        option('upgradeThumbnails', { icon: 'PHOTO_CAMERA' }),
+        option('upgradeThumbnails', { icon: 'AUTO_AWESOME' }),
         option('enableDeArrow', {
           title: 'DeArrow titles',
           subtitle: 'Community titles; slows browsing slightly',
@@ -150,25 +150,34 @@ export const settingsTree: SettingsGroup = {
         }),
         option('enableDeArrowThumbnails', {
           title: 'DeArrow thumbnails',
-          icon: 'PHOTO_CAMERA'
+          icon: 'AUTO_AWESOME'
         }),
         option('hideLogo', { icon: 'YOUTUBE_LOGO' }),
-        option('enableClock', { icon: 'CLOCK' }),
-        option('clock12Hour', { icon: 'CLOCK' }),
-        option('clockShowSeconds', { icon: 'CLOCK' }),
+        option('enableClock', { icon: 'SCHEDULE' }),
+        option('clock12Hour', { icon: 'SCHEDULE' }),
+        option('clockShowSeconds', { icon: 'SCHEDULE' }),
         option('routeColor', { icon: 'SPARKLE' }),
         option('focusContainerColor', { icon: 'SPARKLE' }),
-        option('enableScreenDimming', { icon: 'BRIGHTNESS_LOW' }),
-        option('dimmingTimeout', { icon: 'CLOCK' }),
-        option('dimmingOpacity', { icon: 'BRIGHTNESS_LOW' }),
+        option('enableScreenDimming', { icon: 'MOON' }),
+        option('dimmingTimeout', {
+          title: 'Seconds before dimming',
+          icon: 'TIMER'
+        }),
+        option('dimmingOpacity', { icon: 'SUN' }),
         option('enableHideWatchedVideos', {
           title: 'Hide watched videos',
           icon: 'VISIBILITY_OFF'
         }),
-        option('hideWatchedVideosThreshold', { icon: 'VISIBILITY_OFF' }),
-        option('hideWatchedVideosPages', { icon: 'VISIBILITY_OFF' }),
-        option('disabledSidebarContents', { icon: 'MENU' }),
-        option('disableChannelsOnSidebar', { icon: 'MENU' })
+        option('hideWatchedVideosThreshold', {
+          title: 'Counts as watched at (%)',
+          icon: 'VISIBILITY_OFF'
+        }),
+        option('hideWatchedVideosPages', {
+          title: 'Hide watched videos on',
+          icon: 'VISIBILITY_OFF'
+        }),
+        option('disabledSidebarContents', { icon: 'MENU_FILTER' }),
+        option('disableChannelsOnSidebar', { icon: 'PERSON_MINUS' })
       ]
     },
     {
